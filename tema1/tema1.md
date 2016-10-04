@@ -74,7 +74,7 @@ Como podemos observar, el servicio en la nube es mucho más económico en esta t
 
 ### 3.2. Crear un programa simple en cualquier lenguaje interpretado para Linux, empaquetarlo con CDE y probarlo en diferentes distribuciones.
 
-![Creación de paquete CDE y prueba en Ubuntu](tema1/ej3/ej3_ubuntu.png)
+![Creación de paquete CDE y prueba en Ubuntu](./capturas/ej3_ubuntu.png)
 
 [FALTA PROBAR PAQUETE CDE EN OTRAS DISTROS DE LINUX]()
 
@@ -85,7 +85,7 @@ Como podemos observar, el servicio en la nube es mucho más económico en esta t
 
 El procesador de mi portátil posee y tiene habilitada la tecnología VT-x de Intel (flag vmx). Se trata de un procesador Intel® Core™ i5-2450M CPU @ 2.50GHz × 4. Esta es la salida de la orden:
 
-![Resultado orden grep del ej. 4]()
+![Resultado orden grep del ej. 4](./capturas/ej4.png)
 
 
 ## Ejercicio 5
@@ -94,10 +94,10 @@ El procesador de mi portátil posee y tiene habilitada la tecnología VT-x de In
 
 La herramienta kvm-ok está contenida en el paquete cpu-checker, el cual he tenido que instalar para poder usarla.
 
-![Resultado orden kvm-ok]()
+![Resultado orden kvm-ok](./capturas/ej5_1.png)
 
 ### 5.2. Instalar un hipervisor para gestionar máquinas virtuales, que más adelante se podrá usar en pruebas y ejercicios.
 
 He instalado 2 hipervisores, uno de los cuales ya había utilizado en ocasiones anteriores (VirtualBox) y otro que he instalado por sus amplias posibilidades (Xen).
 
-![Instalación de VirtualBox y Xen](/tema1/ej)
+![Instalación de VirtualBox y Xen](./capturas/ej5_2.png)
