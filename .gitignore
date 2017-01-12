@@ -87,3 +87,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+### Añadidos debido a los ejercicios
+
+*.qcow2
