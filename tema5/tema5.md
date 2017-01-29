@@ -1,5 +1,5 @@
 
-# Ejercicios Tema 4 (Virtualización ligera usando contenedores)
+# Ejercicios Tema 5 (Virtualización completa: uso de máquinas virtuales)
 
 ## Ejercicio 1
 
@@ -161,19 +161,68 @@ Nos pedirá que introduzcamos nuestra contraseña de acceso de VNC. Finalmente, 
 
 ## Ejercicio 5
 
-### Crear una máquina virtual Ubuntu e instalar en ella alguno de los servicios que estamos usando en el proyecto de la asignatura.
+### Crear una máquina virtual Ubuntu utilizando el CLI de Azure e instalar en ella alguno de los servicios que estamos usando en el proyecto de la asignatura.
 
-Para este ejercicio, he creado una máquina virtual con Ubuntu 14.04 utilizando VMM, puesto que la MV que creé en el anterior ejercicio tiene un kernel demasiado antiguo para usar Docker. Primero, instalo git y clono el repositorio de mi proyecto.
+Voy a hacerlo con la nueva versión del CLI de Azure (2.0), que utiliza el comando "az" en vez de "azure", y así voy cogiendo manejo para utilizarla en el hito 5 del proyecto. Para instalarla en Linux, los chicos de Microsoft tienen un script que se puede ejecutar con el siguiente comando:
 
-![Instalar git en la MV](./capturas/ej5_1.png)
+```bash
+curl -L https://aka.ms/InstallAzureCli | bash
+```
 
-Una vez hecho esto, ejecuto el [script de instalación de Docker en Ubuntu](https://github.com/isma94/Travial-Web/blob/master/scripts/installDocker_Ubuntu.sh) que creé para el hito 4 de la asignatura. Una vez instalado Docker, puedo ejecutar el [script que creé para desplegar la aplicación mediante contenedores Docker](https://github.com/isma94/Travial-Web/blob/master/compose/deployDockerCompose_dev.sh) en la MV.
+Reiniciamos la terminal con `exec -l $SHELL` y ya estamos listos para usar la CLI. 
 
-![Instalar Docker en la MV mediante un script](./capturas/ej5_2.png)
+![Instalando el CLI de Azure](./capturas/ej5_1.png)
 
-En este caso, el script no ha funcionado, pues al tratarse de una máquina virtual, no funciona con Docker tal cual lo hace en un host real. En este caso, hay que instalar docker-machine en el host para gestionar el despliegue de contenedores en sus máquinas virtuales. He intentado hacerlo pero no lo he conseguido, y no dispongo de demasiado tiempo así que lo dejaré por aquí.
+Buscamos la imagen que queramos instalar con la orden `az vm image list`; en este caso, vamos a seleccionar una máquina Ubuntu. Para crear la MV, voy a utilizar el tutorial que proporciona Microsoft en la ayuda (`az vm create -h`).
 
-![Intento de conexión con Docker Machine](./capturas/ej5_3.png)
+![Comandos para MV de Azure](./capturas/ej5_2.png)
+
+Primero, hemos de crear un "resource group", dentro del cual añadiremos nuestra nueva MV.
+
+```bash
+az group create -n resGroup -l "West Europe"
+```
+
+![Crear un "resource group" de Azure](./capturas/ej5_3.png)
+
+Con `az vm create`, creamos una MV Ubuntu Server con autenticación de clave pública SSH y un nombre DNS público. El *authentication-type* por defecto en Linux es **ssh**, y el nombre del usuario admin por defecto es el de mi usuario en mi sistema, por lo que no tengo que añadir estas opciones al comando.
+
+```bash
+az vm create -n ejemplo-ubuntu -g resGroup \
+--image Canonical:UbuntuServer:14.04.4-LTS:latest \
+--ssh-key-value ~/.ssh/azure_rsa.pub \
+--public-ip-address-dns-name ejemplo-ubuntu \
+--location "West Europe"
+```
+
+![Crear una MV con Ubuntu Server en Azure](./capturas/ej5_4.png)
+
+Como tardaba demasiado, he cancelado la operación pensando que había escrito mal el comando, pero no era así. Al ejecutarlo de nuevo, me notificaba de que ya se había creado una MV con esas características. Listando las MV disponibles, he podido comprobar que se había creado correctamente.
+
+![Obtener lista de MVs de Azure](./capturas/ej5_5.png)
+
+Para conectar con la MV mediante SSH, averiguamos su IP con el siguiente comando. También podemos conectar con su nombre de dominio, que tendrá la forma **VM_NAME.LOCATION.cloudapp.azure.com**
+
+![Obtener IP pública de una determinada MV](./capturas/ej5_6.png)
+
+Finalmente, conectamos con la MV (se autenticará automáticamente usando la clave SSH):
+
+![Conectar con la MV mediante SSH](./capturas/ej5_7.png)
+
+---------------------
+
+Una vez disponemos de la MV, podemos proceder a instalar la herramienta seleccionada. En este caso, yo he elegido Docker, y lo he instalado con esta serie de pasos:
+
+```bash
+sudo apt-get install git
+git clone https://github.com/isma94/Travial-Web
+cd Travial-Web/scripts
+./installDocker_Ubuntu.sh
+```
+
+Aquí muestro como descargo y ejecuto una imagen de Ubuntu para probarlo:
+
+![Ejecutar contenedor Docker en la MV](./capturas/ej5_8.png)
 
 
 ## Ejercicio 6
